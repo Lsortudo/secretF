@@ -2,7 +2,8 @@ DONE_______  1. chamar as libs que vai usar
 DONE_______  2. project structure
 DONE_______  3. comando cobra
 DONE_______  4. lista com os nomes
-5. ler a lista
+DONE_______  5. ler a lista
+DONE_______  6. printar a lista para mim (conferir se todos os nomes foram printados)
 6. conferir se tem numero par, caso for impar (ainda irei escolher se bota opcao de confirmar que quer fazer impar e alguem sobrar, ou mandar executar outro comando)
 7. faazer a parte com par de retornar as duplas
 8. 
