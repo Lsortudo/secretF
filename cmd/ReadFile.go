@@ -36,25 +36,25 @@ func FunctionReadFile() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer f.Close()
 
-	// comecaremos a ler o arquivo aqui
+	// Começaremos a ler o arquivo aqui
 	scanner := bufio.NewScanner(f)
 
-	// slice nomes
+	// Slice para armazenar os nomes
 	var names []string
-	for scanner.Scan() {
 
+	for scanner.Scan() {
+		// Pega a linha atual
 		line := scanner.Text()
 		names = append(names, line)
+
+		// exibir os nomes para fim de exemplo, se funcionar fazer gerar um TXT de output
+		log.Println(line)
 	}
 
 	// checaar o erro aqui (posteriormente a verificaacao de impar)
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-
-	// exibir os nomes para fim de exemplo, se funcionar fazer gerar um TXT de output
-	log.Println("Nomes lidos do arquivo:", names)
 }
