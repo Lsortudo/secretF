@@ -4,6 +4,29 @@ DONE_______  3. comando cobra
 DONE_______  4. lista com os nomes
 DONE_______  5. ler a lista
 DONE_______  6. printar a lista para mim (conferir se todos os nomes foram printados)
-6. conferir se tem numero par, caso for impar (ainda irei escolher se bota opcao de confirmar que quer fazer impar e alguem sobrar, ou mandar executar outro comando)
-7. faazer a parte com par de retornar as duplas
-8. 
+DONE_______  7. conferir se tem numero par, caso for impar (ainda irei escolher se bota opcao de confirmar que quer fazer impar e alguem sobrar, ou mandar executar outro comando)
+DONE_______  8. faazer a parte com par de retornar as duplas ja separas em um arquivo OUTPUT TXT
+
+
+API CON
+roomID      int
+isEven      bool
+name        string
+
+
+
+oq vai acontecer:
+
+DONE_______ Frontend tem um drag and drop (tambem tem um campo de ID, caso nao seja especificado sera gerado aleatoriamente)
+DONE_______ Manda o arquivo
+DONE_______ Back recebe arquivo
+DONE_______ Le arquivo
+DONE_______ Separa em pares
+DONE_______ Devolve em JSON
+Front consome a API e mostra (todos que tem o codigo pode colocar e ver, botar algo pra salvar em banco ou 24 hrs)
+
+
+
+resolver next ->
+Bastante portugues e ingles no codigo como comentario, resolver isso no final quando tudo tiver pronto; por tudo em ingles.
+Checar variaveis e outras coisas em portugues também.
