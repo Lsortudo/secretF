@@ -23,6 +23,12 @@ DONE_______ Back recebe arquivo
 DONE_______ Le arquivo
 DONE_______ Separa em pares
 DONE_______ Devolve em JSON
+DONE_______ Frontend listou isso com um codigo (codigo é gerado ao apertar o botao, entao consigo mandar do front pra ca, dar retrieve nisso e nos nomes)\
+Adaptar o codigo pra receber o codigo self generated de 5 digitos e a lista
+Fazer com que um mapa basico de map[string]string e depois consultar com nome do mapa[code] = pairs
+Caso funcione o mapa, colocar um Postgrilo pra salvar
+Usuario no front pode consultar uma rota só pra ter acesso ao banco (caso alguem queira confirmar que o sorteio foi oq X pessoa falou, sem precisar sortear dnv)
+Por ultimo fazer uma limpa em arquivos inuteis + código boilerplate + melhorar ao maximo oq conseguir + setar tudo em ingles
 Front consome a API e mostra (todos que tem o codigo pode colocar e ver, botar algo pra salvar em banco ou 24 hrs)
 
 
