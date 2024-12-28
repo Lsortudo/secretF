@@ -12,22 +12,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// CORS  manual teste
+// CORS Middleware
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Adicionando os cabeçalhos necessários para CORS
-		c.Header("Access-Control-Allow-Origin", "*")                                    // Permite qualquer origem, ou substitua * por uma origem específica
-		c.Header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")                    // Métodos permitidos
-		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization") // Cabeçalhos permitidos
-		c.Header("Access-Control-Allow-Credentials", "true")                            // Permite credenciais (cookies, autenticação, etc.)
+		// Adding necessary headers for CORS
+		c.Header("Access-Control-Allow-Origin", "*")                                    // Allows any origin
+		c.Header("Access-Control-Allow-Methods", "GET,POST,OPTIONS")                    // Allowed methods
+		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization") // Allowed headers
+		c.Header("Access-Control-Allow-Credentials", "true")                            // Allows credentials (cookies, auth, etc.)
 
-		// Se for uma requisição OPTIONS, retorne uma resposta 200
+		// Handle preflight OPTIONS request
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(http.StatusOK)
 			return
 		}
 
-		// Passa para o próximo middleware ou handler
+		// Proceed to next middleware or handler
 		c.Next()
 	}
 }
@@ -36,11 +36,18 @@ var serverCmd = &cobra.Command{
 	Use:   "start",
 	Short: "Start the HTTP server",
 	Run: func(cmd *cobra.Command, args []string) {
+		// Initialize storage for secret santa
+		handler.InitializeStorage()
+
+		// Setup Gin router
 		router := gin.Default()
 		router.Use(CORSMiddleware())
-		// Route for secret santa drawing
-		router.POST("/draw", handler.DrawSecretSanta)
 
+		// Routes
+		router.POST("/draw", handler.DrawSecretSanta)          // Route to create pairs
+		router.GET("/verify/:code", handler.VerifySecretSanta) // Route to verify pairs by code
+
+		// Start the server
 		log.Println("Server started on port 8080")
 		if err := router.Run(":8080"); err != nil {
 			log.Fatal(err)

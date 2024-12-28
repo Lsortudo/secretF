@@ -1,39 +1,78 @@
 package handler
 
 import (
-	"errors"
+	//"errors"
 	"log"
 	"net/http"
 
-	secerr "github.com/Lsortudo/secretF/internal/errors"
+	//secerr "github.com/Lsortudo/secretF/internal/errors"
+	"github.com/Lsortudo/secretF/internal/errors"
 	"github.com/Lsortudo/secretF/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
+// Storage for codes and their pairs
+var storage = make(map[string][]service.Pair)
+
+// InitializeStorage initializes the storage map
+func InitializeStorage() {
+	storage = make(map[string][]service.Pair)
+}
+
+// RequestPayload represents the expected JSON payload
+type RequestPayload struct {
+	Code   string   `json:"code"`
+	People []string `json:"people"`
+}
+
+// DrawSecretSanta handles the POST /draw endpoint
 func DrawSecretSanta(c *gin.Context) {
-	log.Println("Received request at /draw")
+	var payload RequestPayload
 
-	var people []string
-	if err := c.ShouldBindJSON(&people); err != nil {
+	// Bind JSON input to payload
+	if err := c.ShouldBindJSON(&payload); err != nil {
 		log.Println("Error binding JSON:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": secerr.ErrInvalidJSON.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": errors.ErrInvalidJSON.Error()})
 		return
 	}
 
-	log.Println("List of participants:", people)
+	// Validate the code
+	if len(payload.Code) != 5 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "code must be exactly 5 characters"})
+		return
+	}
 
-	// Draw the pairs
-	pairs, err := service.DrawPairs(people)
+	// Generate pairs
+	pairs, err := service.DrawPairs(payload.People)
 	if err != nil {
-		log.Println("Error drawing pairs:", err)
-		if errors.Is(err, secerr.ErrOddNumberOfPeople) { // Comparação correta
-			c.JSON(http.StatusBadRequest, gin.H{"error": secerr.ErrOddNumberOfPeople.Error()})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": secerr.ErrInternalError.Error()})
-		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	log.Println("Drawn pairs:", pairs)
-	c.JSON(http.StatusOK, pairs)
+	// Store the pairs with the code
+	storage[payload.Code] = pairs
+
+	// Return the result
+	c.JSON(http.StatusOK, gin.H{
+		"code":  payload.Code,
+		"pairs": pairs,
+	})
+}
+
+// VerifySecretSanta handles the GET /verify/:code endpoint
+func VerifySecretSanta(c *gin.Context) {
+	code := c.Param("code")
+
+	// Check if the code exists in storage
+	pairs, exists := storage[code]
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{"error": "code not found"})
+		return
+	}
+
+	// Return the pairs
+	c.JSON(http.StatusOK, gin.H{
+		"code":  code,
+		"pairs": pairs,
+	})
 }
